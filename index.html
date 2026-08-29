@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cream Story | Porur - Premium 3D Dessert Experience</title>
+    <!-- Tailwind CSS for rapid modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js for 3D graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0710;
+            color: #fce7f3;
+            overflow-x: hidden;
+        }
+        .font-serif-heading {
+            font-family: 'Playfair Display', serif;
+        }
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .glass-card {
+            background: rgba(23, 15, 38, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 182, 193, 0.15);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fbbf24 0%, #f43f5e 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .cream-gradient-bg {
+            background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+        }
+        .card-3d {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(4deg) rotateY(-2deg);
+            box-shadow: 0 25px 40px rgba(244, 63, 94, 0.25);
+        }
+    </style>
+</head>
+<body class="relative min-h-screen">
+
+    <!-- 3D WebGL Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Content Overlay -->
+    <div class="relative z-10">
+
+        <!-- Navigation -->
+        <nav class="fixed top-0 left-0 w-full z-50 px-6 py-4">
+            <div class="max-w-7xl mx-auto flex justify-between items-center glass-pill rounded-full px-6 py-3">
+                <a href="#" class="text-2xl font-extrabold tracking-wider font-serif-heading gold-gradient-text">
+                    CREAM STORY
+                </a>
+                <div class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+                    <a href="#about" class="hover:text-pink-400 transition">About</a>
+                    <a href="#menu" class="hover:text-pink-400 transition">Popular Menu</a>
+                    <a href="#reviews" class="hover:text-pink-400 transition">Reviews</a>
+                    <a href="#location" class="hover:text-pink-400 transition">Visit Us</a>
+                </div>
+                <a href="#order" class="cream-gradient-bg px-5 py-2.5 rounded-full text-white font-bold text-sm shadow-lg hover:opacity-90 transition transform hover:scale-105">
+                    <i class="fa-solid fa-utensils mr-2"></i>Order Online
+                </a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="min-h-screen flex items-center justify-center px-6 pt-28 pb-12">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-flex items-center space-x-2 glass-pill px-4 py-2 rounded-full mb-6">
+                    <span class="text-yellow-400 text-sm"><i class="fa-solid fa-star"></i> 4.6</span>
+                    <span class="text-gray-400 text-xs">|</span>
+                    <span class="text-xs text-gray-300">1,200+ Porur Foodies Joined</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-extrabold font-serif-heading mb-6 leading-tight">
+                    Taste the <span class="gold-gradient-text">Extraordinary</span> Dessert Experience.
+                </h1>
+                
+                <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto font-light leading-relaxed">
+                    Indulge in velvety Dream Cakes, viral Dubai Cheese Cream Cakes, warm Waffle Towers, and signature Faloodas in our cozy swing-seating ambiance.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#order" class="w-full sm:w-auto cream-gradient-bg px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-pink-500/30 transition transform hover:-translate-y-1">
+                        Order Online Now <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#location" class="w-full sm:w-auto glass-card px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white/10 transition border border-white/20">
+                        <i class="fa-solid fa-chair text-pink-400 mr-2"></i> Reserve Table
+                    </a>
+                </div>
+
+                <div class="mt-12 flex justify-center items-center gap-8 text-xs text-gray-400">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-regular fa-clock text-pink-400"></i> Open late till 2:00 AM
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-pink-400"></i> Ramapuram, Porur
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Signature 3D Showcase / Highlights -->
+        <section id="menu" class="py-20 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-xs font-bold tracking-widest text-pink-400 uppercase mb-2">Handcrafted Indulgence</h2>
+                    <h3 class="text-4xl md:text-5xl font-extrabold font-serif-heading">Menu Highlights</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Item 1 -->
+                    <div class="glass-card rounded-3xl p-6 card-3d relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-500/20 rounded-full blur-2xl"></div>
+                        <span class="bg-amber-400/20 text-amber-300 text-xs font-bold px-3 py-1 rounded-full">🔥 Viral Popular</span>
+                        <div class="h-40 my-4 flex items-center justify-center">
+                            <i class="fa-solid fa-cake-candles text-7xl text-pink-400/80 drop-shadow-lg"></i>
+                        </div>
+                        <h4 class="text-xl font-bold mb-2">Dream Cake</h4>
+                        <p class="text-gray-400 text-sm mb-4">Five decadent chocolate layers of pure gooey happiness.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-pink-300">Signature Item</span>
+                            <button class="glass-pill px-4 py-2 rounded-xl text-xs font-bold hover:bg-pink-500 hover:border-pink-500 transition">Order</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="glass-card rounded-3xl p-6 card-3d relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500/20 rounded-full blur-2xl"></div>
+                        <span class="bg-yellow-400/20 text-yellow-300 text-xs font-bold px-3 py-1 rounded-full">⭐ Must Try</span>
+                        <div class="h-40 my-4 flex items-center justify-center">
+                            <i class="fa-solid fa-cheese text-7xl text-yellow-400/80 drop-shadow-lg"></i>
+                        </div>
+                        <h4 class="text-xl font-bold mb-2">Dubai Cheese Cake</h4>
+                        <p class="text-gray-400 text-sm mb-4">Ultra-rich cream cheese filling with a golden crunchy touch.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-pink-300">Best Seller</span>
+                            <button class="glass-pill px-4 py-2 rounded-xl text-xs font-bold hover:bg-pink-500 hover:border-pink-500 transition">Order</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="glass-card rounded-3xl p-6 card-3d relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-rose-500/20 rounded-full blur-2xl"></div>
+                        <span class="bg-rose-400/20 text-rose-300 text-xs font-bold px-3 py-1 rounded-full">🧇 Freshly Baked</span>
+                        <div class="h-40 my-4 flex items-center justify-center">
+                            <i class="fa-solid fa-stroopwafel text-7xl text-rose-400/80 drop-shadow-lg"></i>
+                        </div>
+                        <h4 class="text-xl font-bold mb-2">Waffle Tower</h4>
+                        <p class="text-gray-400 text-sm mb-4">Stacked crispy warm waffles dripping in Nutella & white choco.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-pink-300">Crowd Favorite</span>
+                            <button class="glass-pill px-4 py-2 rounded-xl text-xs font-bold hover:bg-pink-500 hover:border-pink-500 transition">Order</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="glass-card rounded-3xl p-6 card-3d relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl"></div>
+                        <span class="bg-purple-400/20 text-purple-300 text-xs font-bold px-3 py-1 rounded-full">🍧 Chill Special</span>
+                        <div class="h-40 my-4 flex items-center justify-center">
+                            <i class="fa-solid fa-glass-water text-7xl text-purple-400/80 drop-shadow-lg"></i>
+                        </div>
+                        <h4 class="text-xl font-bold mb-2">Passion Fruit Falooda</h4>
+                        <p class="text-gray-400 text-sm mb-4">Tropical passion fruit twist loaded with dry fruits & ice cream.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-pink-300">Refreshing</span>
+                            <button class="glass-pill px-4 py-2 rounded-xl text-xs font-bold hover:bg-pink-500 hover:border-pink-500 transition">Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof / Google Reviews Summary -->
+        <section id="reviews" class="py-16 px-6">
+            <div class="max-w-5xl mx-auto glass-card rounded-3xl p-8 md:p-12 relative">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                    <div class="text-center md:text-left border-b md:border-b-0 md:border-r border-white/10 pb-6 md:pb-0 md:pr-8">
+                        <h3 class="text-6xl font-black text-amber-400 mb-2">4.6</h3>
+                        <div class="text-yellow-400 text-lg mb-2">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                        </div>
+                        <p class="text-sm text-gray-300">Based on <strong>1,249+ Google Reviews</strong></p>
+                        <span class="inline-block mt-3 text-xs bg-white/10 px-3 py-1 rounded-full text-gray-400">Summarized by AI</span>
+                    </div>
+
+                    <div class="md:col-span-2 space-y-4">
+                        <div class="glass-pill p-4 rounded-2xl">
+                            <p class="text-sm italic text-gray-200">"I ordered triple chocolate waffle it is so soft and creamy I just loved it!"</p>
+                        </div>
+                        <div class="glass-pill p-4 rounded-2xl">
+                            <p class="text-sm italic text-gray-200">"Cozy atmosphere with unique swing-style seating. The mango ice cake is out of this world!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location & Contact -->
+        <section id="location" class="py-16 px-6 mb-20">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <div class="glass-card rounded-3xl p-8 space-y-6">
+                    <h3 class="text-3xl font-bold font-serif-heading">Visit Cream Story Porur</h3>
+                    
+                    <div class="space-y-4 text-sm text-gray-300">
+                        <div class="flex items-start gap-4">
+                            <i class="fa-solid fa-map-pin text-xl text-pink-400 mt-1"></i>
+                            <div>
+                                <p class="font-bold text-white">Address</p>
+                                <p>Porur, Guindy Road, Ramapuram, Chennai, Tamil Nadu 600089</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <i class="fa-regular fa-clock text-xl text-pink-400 mt-1"></i>
+                            <div>
+                                <p class="font-bold text-white">Opening Hours</p>
+                                <p>Everyday: <span class="text-emerald-400 font-semibold">Open · Closes 2:00 AM</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex flex-wrap gap-4">
+                        <a href="https://maps.google.com" target="_blank" class="cream-gradient-bg px-6 py-3 rounded-xl font-bold text-sm shadow-lg">
+                            <i class="fa-solid fa-diamond-turn-right mr-2"></i> Get Directions
+                        </a>
+                        <a href="#reserve" class="glass-pill px-6 py-3 rounded-xl font-bold text-sm hover:bg-white/20 transition">
+                            <i class="fa-regular fa-calendar-check mr-2"></i> Reserve Table
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Google Map Placeholder Card -->
+                <div class="glass-card rounded-3xl p-4 h-80 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-pink-900/10 backdrop-blur-xs"></div>
+                    <i class="fa-solid fa-map-location-dot text-6xl text-pink-400/50 mb-4"></i>
+                    <h4 class="text-lg font-bold">Interactive Location</h4>
+                    <p class="text-xs text-gray-400 max-w-xs mt-1">Conveniently located on Guindy Road, Ramapuram</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-white/10 py-8 text-center text-xs text-gray-500">
+            <p>© 2026 Cream Story Porur. All Rights Reserved.</p>
+        </footer>
+
+    </div>
+
+    <!-- 3D Interactive Animation Script -->
+    <script>
+        // Setup Three.js Scene
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0b0710, 0.03);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 15;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Floating 3D Geometric Objects (Representing Scoops & Dessert Treats)
+        const items = [];
+        const geometries = [
+            new THREE.IcosahedronGeometry(1.2, 0), // Floating Scoop
+            new THREE.TorusGeometry(1, 0.4, 16, 100), // Donut / Ring
+            new THREE.ConeGeometry(0.8, 1.8, 16),    // Cone
+            new THREE.BoxGeometry(1, 1, 1)          // Waffle Cube
+        ];
+
+        const materials = [
+            new THREE.MeshStandardMaterial({ color: 0xf43f5e, roughness: 0.3, metalness: 0.2 }),
+            new THREE.MeshStandardMaterial({ color: 0xfbbf24, roughness: 0.2, metalness: 0.4 }),
+            new THREE.MeshStandardMaterial({ color: 0xec4899, roughness: 0.4, metalness: 0.1 }),
+            new THREE.MeshStandardMaterial({ color: 0xa855f7, roughness: 0.2, metalness: 0.3 })
+        ];
+
+        for (let i = 0; i < 25; i++) {
+            const geom = geometries[Math.floor(Math.random() * geometries.length)];
+            const mat = materials[Math.floor(Math.random() * materials.length)];
+            const mesh = new THREE.Mesh(geom, mat);
+
+            mesh.position.x = (Math.random() - 0.5) * 30;
+            mesh.position.y = (Math.random() - 0.5) * 30;
+            mesh.position.z = (Math.random() - 0.5) * 20;
+
+            mesh.rotation.x = Math.random() * Math.PI;
+            mesh.rotation.y = Math.random() * Math.PI;
+
+            const scale = Math.random() * 0.8 + 0.5;
+            mesh.scale.set(scale, scale, scale);
+
+            scene.add(mesh);
+            items.push({
+                mesh: mesh,
+                rotSpeedX: (Math.random() - 0.5) * 0.01,
+                rotSpeedY: (Math.random() - 0.5) * 0.01,
+                floatSpeed: Math.random() * 0.005 + 0.002
+            });
+        }
+
+        // Ambient & Directional Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+
+        const pointLight = new THREE.PointLight(0xf43f5e, 2, 50);
+        pointLight.position.set(10, 10, 10);
+        scene.add(pointLight);
+
+        // Interactive Mouse Movement
+        let mouseX = 0;
+        let mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            items.forEach(item => {
+                item.mesh.rotation.x += item.rotSpeedX;
+                item.mesh.rotation.y += item.rotSpeedY;
+                item.mesh.position.y += Math.sin(Date.now() * item.floatSpeed) * 0.005;
+            });
+
+            // Smooth Camera Parallax Effect
+            camera.position.x += (mouseX * 2 - camera.position.x) * 0.05;
+            camera.position.y += (mouseY * 2 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Responsive Window Resizing
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
